@@ -44,9 +44,7 @@ checkpoints/
 *.npy
 *.csv
 
-# Predictions and outputs (optional - can regenerate)
-predictions_*.png
-training_history.png
+# Note: predictions_*.png and training_history.png ARE tracked for documentation
 
 # Environment variables
 .env

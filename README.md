@@ -128,6 +128,9 @@ output_dir = PARENT_FOLDER                       # Predictions & visualizations
 d:/python/Origin/
 ├── README.md                          # This file
 ├── CLIPSeg_Training.ipynb            # Main training notebook
+├── Data.ipynb                        # Data analysis and exploration
+├── clipseg_preprocessing.py          # Preprocessing pipeline script
+├── clipseg_dataloader.py             # Custom PyTorch dataloader
 ├── processed/                         # Preprocessed data
 │   ├── train/
 │   │   ├── images/                   # JPG images
@@ -289,6 +292,73 @@ processed/
    - Balanced distribution across prompts
 
 ---
+
+## 🛠️ Preprocessing Scripts
+
+### clipseg_preprocessing.py
+
+Standalone Python script to convert raw COCO datasets into CLIPSeg training format.
+
+**Features:**
+- Loads COCO format JSON annotations
+- Handles polygons (cracks) and bounding boxes (drywall)
+- Generates binary masks with proper boundary handling
+- Assigns random text prompts per-image
+- Maintains train/validation split integrity
+- Produces metadata CSV files with full traceability
+
+**Usage:**
+```bash
+python clipseg_preprocessing.py
+```
+
+**Main Functions:**
+- `load_coco()` - Load COCO JSON annotations
+- `create_mask_polygon()` - Convert polygon segmentations to masks
+- `create_mask_bbox()` - Convert bounding boxes to masks
+- `assign_prompt()` - Randomly assign dataset-specific prompts
+- `process_dataset()` - Main processing function for one split
+- `merge_datasets()` - Merge cracks + drywall datasets while maintaining splits
+- `visualize_sample()` - Create overlay visualizations (bonus)
+
+**Configuration** (in `__main__` block):
+```python
+CRACKS_PATH = "d:/python/Origin/cracks-1"
+DRYWALL_PATH = "d:/python/Origin/Drywall-Join-Detect-1"
+OUTPUT_PATH = "d:/python/Origin/processed"
+```
+
+### Data.ipynb
+
+Jupyter notebook for data exploration and analysis.
+
+**Contains:**
+- Dataset loading and inspection
+- Metadata exploration (splits, distributions, statistics)
+- Sample visualization (image + mask + prompt)
+- Annotation format inspection
+- Dataset statistics and quality checks
+
+**Use this notebook to:**
+- Understand dataset structure and distribution
+- Verify preprocessing output
+- Explore sample images and masks
+- Inspect metadata CSV files
+
+### clipseg_dataloader.py
+
+Custom PyTorch DataLoader implementation with special handling for CLIPSeg.
+
+**Features:**
+- Variable-length token padding per-batch
+- Proper image resizing and preprocessing
+- Mask interpolation to match model input
+- Batch collation for text-image pairs
+
+**Used by:**
+- `CLIPSeg_Training.ipynb` (Cell 4 imports custom collate_fn)
+
+---
 ## 📊 Dataset Preparation
 
 ### Expected Data Format
@@ -408,6 +478,36 @@ Epoch 19/50 | Train Loss: 0.1557 | Val Loss: 0.2865 | Val IoU: 0.5517 | Val Dice
 **Combined** (20 total samples):
 - **mIoU**: 0.4048
 - **mDice**: 0.5352
+
+### Prediction Visualizations
+
+**Group 1 - First Half Validation Set** (10 samples):
+
+![Predictions Group 1](predictions_group1.png)
+
+*Grid layout: Image | Ground Truth Mask | Model Prediction*
+- Shows segmentation results for cracks and drywall taping
+- High IoU predictions in upper rows (0.7-0.85)
+- Some lower confidence predictions in lower rows (IoU 0.1-0.4)
+
+**Group 2 - Second Half Validation Set** (10 samples):
+
+![Predictions Group 2](predictions_group2.png)
+
+*Grid layout: Image | Ground Truth Mask | Model Prediction*
+- Demonstrates model generalization across dataset
+- Mix of accurate segmentations and challenging cases
+- Notable: Drywall annotations with multiple separate patches preserved correctly
+
+### Training History
+
+![Training History](training_history.png)
+
+*4-panel visualization showing:*
+- **Loss Trajectory**: Training and validation loss over 50 epochs
+- **IoU Metric**: Validation IoU improvement with early stopping marker
+- **Dice Coefficient**: Validation Dice over training
+- **Improvement Rate**: Epoch-by-epoch IoU gains
 
 ### Model Files
 
