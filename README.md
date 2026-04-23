@@ -130,7 +130,6 @@ d:/python/Origin/
 ├── CLIPSeg_Training.ipynb            # Main training notebook
 ├── Data.ipynb                        # Data analysis and exploration
 ├── clipseg_preprocessing.py          # Preprocessing pipeline script
-├── clipseg_dataloader.py             # Custom PyTorch dataloader
 ├── processed/                         # Preprocessed data
 │   ├── train/
 │   │   ├── images/                   # JPG images
@@ -345,21 +344,7 @@ Jupyter notebook for data exploration and analysis.
 - Explore sample images and masks
 - Inspect metadata CSV files
 
-### clipseg_dataloader.py
-
-Custom PyTorch DataLoader implementation with special handling for CLIPSeg.
-
-**Features:**
-- Variable-length token padding per-batch
-- Proper image resizing and preprocessing
-- Mask interpolation to match model input
-- Batch collation for text-image pairs
-
-**Used by:**
-- `CLIPSeg_Training.ipynb` (Cell 4 imports custom collate_fn)
-
 ---
-## 📊 Dataset Preparation
 
 ### Expected Data Format
 
