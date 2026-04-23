@@ -1,0 +1,57 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+env/
+venv/
+ENV/
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+
+# Jupyter Notebook
+.ipynb_checkpoints/
+*.ipynb_checkpoints
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Data and checkpoints (keep model files, but exclude large data)
+processed/
+checkpoints/
+*.npy
+*.csv
+
+# Predictions and outputs (optional - can regenerate)
+predictions_*.png
+training_history.png
+
+# Environment variables
+.env
+.env.local
+
+# MacOS
+.AppleDouble
+.LSOverride
